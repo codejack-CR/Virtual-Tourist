@@ -1,5 +1,6 @@
 package com.sih.virtualtourist;
 
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -12,6 +13,8 @@ import java.util.List;
 public class PublicReviewRecyclerAdapter extends RecyclerView.Adapter {
 
     private List<String> reviews;
+    //TODO: Create a helper class to fetch Drawables from InputStream of Firebase and update the Adapter
+    private List<Drawable> userProfilePics;
     public PublicReviewRecyclerAdapter(List<String> reviews){
         this.reviews = reviews;
     }

@@ -1,29 +1,51 @@
 package com.sih.virtualtourist;
 
-import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Scanner;
+import java.util.StringTokenizer;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+public class WikipediaHelper{
+    private static final String WIKI_STATIC = "https://en.wikipedia.org/w/api.php?format=html&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=";
 
-import com.google.android.material.tabs.TabLayout;
+    public static CharSequence getSummaryFromWiki(CharSequence charSequence) throws IOException{
+        CharSequence response = null;
+        response = getResponsefromURL(getURL(charSequence));
+        WikiJSONParser.parseJSON(response);
+        return WikiJSONParser.getMonumentInfoPostParse();
+    }
 
-import org.w3c.dom.Text;
+    private static URL getURL(CharSequence charSequence){
+        StringBuilder url = new StringBuilder();
+        url.append(WIKI_STATIC);
+        StringTokenizer stringTokenizer = new StringTokenizer(charSequence.toString()," ");
+        do{
+            url.append(stringTokenizer.nextToken()).append("%20");
+        }while(stringTokenizer.hasMoreTokens());
+        URL resultURL = null;
+        try{
+            resultURL = new URL(url.toString());
+        }
+        catch (MalformedURLException e){
+            e.printStackTrace();
+        }
+        finally {
+            return resultURL;
+        }
+    }
 
-public class WikipediaHelper extends AppCompatActivity {
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.post_detect_result);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        final ViewPager vp = findViewById(R.id.vp_result_window);
-        vp.setAdapter(new ResultViewPagerAdapter(fragmentManager, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT));
-        TabLayout tab = findViewById(R.id.tab_results_viewpager);
-        tab.setupWithViewPager(vp);
+    private static CharSequence getResponsefromURL(URL url) throws IOException{
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        InputStream inputStream = urlConnection.getInputStream();
+        StringBuilder stringBuilder = new StringBuilder();
+        Scanner scanner = new Scanner(inputStream);
+        while(scanner.hasNext()){
+            stringBuilder.append(scanner.next());
+        }
+        urlConnection.disconnect();
+        return stringBuilder;
     }
 }

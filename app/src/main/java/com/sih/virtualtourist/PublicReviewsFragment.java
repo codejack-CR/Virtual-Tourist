@@ -37,6 +37,7 @@ public class PublicReviewsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = view.findViewById(R.id.rv_reviews_frag);
         List<String> userReviews = new ArrayList<>();
+        //TODO: Parse User Reviews from DB
         for(int i=0;i<99;i++){
             userReviews.add("REVIEW\t");
         }
