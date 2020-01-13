@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cv_monument_pic_and_text"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="10sp"
+    android:padding="10sp">
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_monument_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:autoSizeTextType="uniform"
+            android:textColor="@android:color/black"
+            app:autoSizeMinTextSize="35sp"
+            app:fontFamily="cursive"
+            android:gravity="center"
+            android:text="DEBUG"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_monument_info"
+            android:layout_width="match_parent"
+            android:textAlignment="center"
+            android:layout_marginTop="10sp"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            app:autoSizeMinTextSize="25sp"
+            android:fontFamily="sans-serif"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</com.google.android.material.card.MaterialCardView>

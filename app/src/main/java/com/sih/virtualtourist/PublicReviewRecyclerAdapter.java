@@ -1,32 +1,44 @@
 package com.sih.virtualtourist;
 
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+import java.util.List;
 
 public class PublicReviewRecyclerAdapter extends RecyclerView.Adapter {
 
-    private int itemCount;
-    private String data;
-
-    public PublicReviewRecyclerAdapter(int count, String data){
-        this.itemCount = count;
-        this.data = data;
+    private List<String> reviews;
+    public PublicReviewRecyclerAdapter(List<String> reviews){
+        this.reviews = reviews;
     }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder{
+        public CardView cv;
+        public ViewHolder(CardView cardView){
+            super(cardView);
+            cv = cardView;
+        }
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        CardView cardView = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.review_card_layout, parent, false);
+        return new ViewHolder(cardView);
     }
-
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-
+        TextView review = holder.itemView.findViewById(R.id.tv_user_review);
+        review.setText(reviews.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return reviews.size();
     }
+
 }

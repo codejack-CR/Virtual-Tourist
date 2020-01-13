@@ -28,7 +28,7 @@ public class MonumentInfoFrag extends Fragment {
         View view = getView();
         TextView tv = view.findViewById(R.id.tv_monument_info);
         StringBuilder s = new StringBuilder();
-        for(int i=0;i<9999;i++,s.append("Info\n"));
+        for(int i=0;i<999;i++,s.append("Info\n"));
         tv.setText(s.toString());
     }
 }
