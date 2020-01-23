@@ -10,9 +10,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -40,26 +42,26 @@ public class MonumentInfoFrag extends Fragment {
         // Required empty public constructor
     }
 
-    TextView tv;
-    WebView webView;
+    TextView mMonumentInfo;
+    TextView mMonumentName;
     AppCompatImageView mMonumentImage;
     FloatingActionButton mCameraButton;
-    static final int ID_CAMERA_ACTION = 101;
-    String currentPhotoPath;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_monument_info, container, false);
+        return inflater.inflate(R.layout.fragment_monument_info_temp, container, false);
     }
 
     @Override
     public void onStart() {
         super.onStart();
         View view = getView();
-        webView = view.findViewById(R.id.wv_monument_wiki);
+        mMonumentInfo = view.findViewById(R.id.tv_monument_info);
         mCameraButton = view.findViewById(R.id.fab_camera);
         mMonumentImage = view.findViewById(R.id.iv_user_image);
+        mMonumentName = view.findViewById(R.id.tv_monument_name);
+        setImage();
         mCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,40 +69,40 @@ public class MonumentInfoFrag extends Fragment {
                 if(cameraIntent.resolveActivity(getActivity().getPackageManager()) != null){
                     File photoFile = null;
                     try{
-                        photoFile = createImageFile();
+                        photoFile = MainActivity.createImageFile(getActivity());
                     }
                     catch (IOException e){
                         e.printStackTrace();
                     }
                     if(photoFile != null){
-                        //TODO: Reading this photo in another service to get the info about it
                         Uri photoURI = FileProvider.getUriForFile(getContext(),BuildConfig.APPLICATION_ID + ".fileprovider",photoFile);
                         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoURI);
-                        startActivityForResult(cameraIntent, ID_CAMERA_ACTION);
+                        startActivityForResult(cameraIntent, MainActivity.ID_CAMERA_ACTION);
                     }
                 }
             }
         });
-//        tv = view.findViewById(R.id.tv_monument_info);
-        new Querier().execute("Taj Mahal");
+        //TODO: Receiving the Query Param after analysis
+        //Null check can be removed after analysis is successful
+        if(PostDetectActivity.detectedCity != null){
+            new Querier().execute(PostDetectActivity.detectedCity.toString());
+            mMonumentName.setText(PostDetectActivity.detectedCity.toString());
+        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == ID_CAMERA_ACTION && resultCode == RESULT_OK){
-            Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath);
-            mMonumentImage.setImageBitmap(bitmap);
+        if(requestCode == MainActivity.ID_CAMERA_ACTION && resultCode == RESULT_OK){
+            setImage();
         }
     }
 
-    private File createImageFile() throws IOException{
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(imageFileName,".jpg",storageDir);
-        currentPhotoPath = image.getAbsolutePath();
-        return image;
+    private void setImage(){
+        Bitmap bitmap = BitmapFactory.decodeFile(MainActivity.currentPhotoPath);
+        mMonumentImage.setMaxHeight(100);
+        mMonumentImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        mMonumentImage.setImageBitmap(bitmap);
     }
 
     class Querier extends AsyncTask<String, Void, String>{
@@ -122,15 +124,7 @@ public class MonumentInfoFrag extends Fragment {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-//            tv.setText(s);
-            String base64 = null;
-            try{
-                base64 = android.util.Base64.encodeToString(s.getBytes("UTF-8"), Base64.DEFAULT);
-            }
-            catch (UnsupportedEncodingException e){
-                e.printStackTrace();
-            }
-            webView.loadData(base64,"text/html; charset=utf-8","base64");
+            mMonumentInfo.setText(s);
         }
     }
 }

@@ -9,13 +9,12 @@ import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class WikipediaHelper{
-    private static final String WIKI_STATIC = "https://en.wikipedia.org/w/api.php?format=html&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=";
+    private static final String WIKI_STATIC = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=";
 
     public static CharSequence getSummaryFromWiki(CharSequence charSequence) throws IOException{
         CharSequence response = null;
         response = getResponsefromURL(getURL(charSequence));
-        WikiJSONParser.parseJSON(response);
-        return WikiJSONParser.getMonumentInfoPostParse();
+        return WikiJSONParser.getMonumentInfo(response);
     }
 
     private static URL getURL(CharSequence charSequence){

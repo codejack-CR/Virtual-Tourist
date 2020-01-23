@@ -18,7 +18,6 @@
             app:titleEnabled="false"
             android:fitsSystemWindows="true">
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/iv_user_image"
                     android:src="@mipmap/ic_launcher"
                     android:layout_gravity="center"
                     android:layout_width="match_parent"
@@ -53,7 +52,6 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tv_monument_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="?attr/actionBarSize"
@@ -61,25 +59,24 @@
                     app:fontFamily="cursive"
                     android:gravity="center"
                     android:text="DEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUG"/>
-                <!--        <androidx.appcompat.widget.AppCompatTextView-->
-                <!--            android:id="@+id/tv_monument_info"-->
-                <!--            android:layout_width="match_parent"-->
-                <!--            android:textAlignment="center"-->
-                <!--            android:layout_marginTop="10sp"-->
-                <!--            android:layout_height="wrap_content"-->
-                <!--            android:textColor="@android:color/black"-->
-                <!--            app:autoSizeMinTextSize="25sp"-->
-                <!--            android:fontFamily="sans-serif"/>-->
-                <WebView
-                    android:id="@+id/wv_monument_wiki"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"/>
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tv_monument_info"
+                            android:layout_width="match_parent"
+                            android:textAlignment="center"
+                            android:layout_marginTop="10sp"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/black"
+                            app:autoSizeMinTextSize="25sp"
+                            android:fontFamily="sans-serif"/>
+<!--                <WebView-->
+<!--                    android:id="@+id/wv_monument_wiki"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:clickable="true"/>-->
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </androidx.core.widget.NestedScrollView>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_tts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15sp"
@@ -90,7 +87,6 @@
         app:rippleColor="@color/colorPrimaryDark"
         app:layout_anchorGravity="top|end"/>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_camera"
         android:clickable="true"
         android:layout_gravity="bottom|end"
         android:layout_width="wrap_content"
