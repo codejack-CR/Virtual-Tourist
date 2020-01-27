@@ -59,7 +59,8 @@
                     app:fontFamily="cursive"
                     android:gravity="center"
                     android:text="DEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUG"/>
-                        <androidx.appcompat.widget.AppCompatTextView
+                        <TextView
+                            android:inputType="textMultiLine"
                             android:id="@+id/tv_monument_info"
                             android:layout_width="match_parent"
                             android:textAlignment="center"
@@ -68,11 +69,6 @@
                             android:textColor="@android:color/black"
                             app:autoSizeMinTextSize="25sp"
                             android:fontFamily="sans-serif"/>
-<!--                <WebView-->
-<!--                    android:id="@+id/wv_monument_wiki"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:clickable="true"/>-->
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </androidx.core.widget.NestedScrollView>

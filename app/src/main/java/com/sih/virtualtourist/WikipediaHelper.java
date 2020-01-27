@@ -11,16 +11,16 @@ import java.util.StringTokenizer;
 public class WikipediaHelper{
     private static final String WIKI_STATIC = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=";
 
-    public static CharSequence getSummaryFromWiki(CharSequence charSequence) throws IOException{
-        CharSequence response = null;
-        response = getResponsefromURL(getURL(charSequence));
+    public static String getSummaryFromWiki(String charSequence) throws IOException{
+        String response = null;
+        response = getResponseFromURL(getURL(charSequence));
         return WikiJSONParser.getMonumentInfo(response);
     }
 
-    private static URL getURL(CharSequence charSequence){
+    private static URL getURL(String charSequence){
         StringBuilder url = new StringBuilder();
         url.append(WIKI_STATIC);
-        StringTokenizer stringTokenizer = new StringTokenizer(charSequence.toString()," ");
+        StringTokenizer stringTokenizer = new StringTokenizer(charSequence," ");
         do{
             url.append(stringTokenizer.nextToken()).append("%20");
         }while(stringTokenizer.hasMoreTokens());
@@ -36,7 +36,7 @@ public class WikipediaHelper{
         }
     }
 
-    private static CharSequence getResponsefromURL(URL url) throws IOException{
+    private static String getResponseFromURL(URL url) throws IOException{
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         InputStream inputStream = urlConnection.getInputStream();
         StringBuilder stringBuilder = new StringBuilder();
@@ -45,6 +45,6 @@ public class WikipediaHelper{
             stringBuilder.append(scanner.next());
         }
         urlConnection.disconnect();
-        return stringBuilder;
+        return stringBuilder.toString();
     }
 }
