@@ -45,4 +45,5 @@ dependencies {
     def camerax_version = '1.0.0-alpha06'
     implementation "androidx.camera:camera-core:${camerax_version}"
     implementation "androidx.camera:camera-camera2:${camerax_version}"
+    implementation 'com.android.volley:volley:1.1.1'
 }

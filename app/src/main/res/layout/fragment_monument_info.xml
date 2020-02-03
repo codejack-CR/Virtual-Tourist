@@ -59,7 +59,7 @@
                     app:fontFamily="cursive"
                     android:gravity="center"
                     android:text="DEBUGDEBUGDEBUGDEBUGDEBUGDEBUGDEBUG"/>
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:inputType="textMultiLine"
                             android:id="@+id/tv_monument_info"
                             android:layout_width="match_parent"
