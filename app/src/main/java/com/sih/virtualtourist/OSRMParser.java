@@ -32,6 +32,7 @@ public class OSRMParser {
             String coords = wayPoint.getString("location");
             coordinates.add(coords);
         }
+        //Adding all to List's List
         wayPointData.add(distanceInfo);wayPointData.add(nameOfPlace); wayPointData.add(coordinates);
         return wayPointData;
     }
