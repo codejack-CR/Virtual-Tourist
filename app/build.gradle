@@ -46,7 +46,5 @@ dependencies {
     implementation "androidx.camera:camera-core:${camerax_version}"
     implementation "androidx.camera:camera-camera2:${camerax_version}"
     implementation 'com.android.volley:volley:1.1.1'
-    //noinspection GradleCompatible
-    implementation 'com.google.android.gms:play-services:12.0.1'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
 }

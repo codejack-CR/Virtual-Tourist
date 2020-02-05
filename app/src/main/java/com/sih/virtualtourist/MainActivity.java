@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
@@ -37,23 +38,30 @@ public class MainActivity extends AppCompatActivity {
         mCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if(cameraIntent.resolveActivity(getPackageManager()) != null){
-                    File photo = null;
-                    try{
-                        photo = createImageFile(MainActivity.this);
-                    }
-                    catch(IOException e){
-                        e.printStackTrace();
-                    }
-                    if(photo != null){
-                        Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),BuildConfig.APPLICATION_ID + ".fileprovider", photo);
-                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoURI);
-                        startActivityForResult(cameraIntent, ID_CAMERA_ACTION);
-                    }
-                }
+                Intent intent = getPackageManager().getLaunchIntentForPackage("com.google.ar.lens");
+                startActivity(intent);
             }
         });
+//        mCameraButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                if(cameraIntent.resolveActivity(getPackageManager()) != null){
+//                    File photo = null;
+//                    try{
+//                        photo = createImageFile(MainActivity.this);
+//                    }
+//                    catch(IOException e){
+//                        e.printStackTrace();
+//                    }
+//                    if(photo != null){
+//                        Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),BuildConfig.APPLICATION_ID + ".fileprovider", photo);
+//                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoURI);
+//                        startActivityForResult(cameraIntent, ID_CAMERA_ACTION);
+//                    }
+//                }
+//            }
+//        });
     }
 
     @Override
