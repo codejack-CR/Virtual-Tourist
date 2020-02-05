@@ -9,6 +9,7 @@ import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.View;
@@ -19,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     static final int ID_CAMERA_ACTION = 101;
     ImageButton mCameraButton;
     Toolbar toolbar;
+    FloatingActionButton mPlanTripButton;
 
     private void initializeViewsOnCreate(){
         mCameraButton = findViewById(R.id.imgbtn_main_camera);
@@ -39,6 +43,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = getPackageManager().getLaunchIntentForPackage("com.google.ar.lens");
+                startActivity(intent);
+            }
+        });
+        mPlanTripButton = findViewById(R.id.fab_main_plan_trip);
+        mPlanTripButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, TripPlannerActivity.class);
                 startActivity(intent);
             }
         });
@@ -75,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initializeViewsOnCreate();

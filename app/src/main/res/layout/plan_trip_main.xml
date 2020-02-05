@@ -5,28 +5,9 @@
     android:layout_width="match_parent"
     android:padding="10sp"
     android:layout_height="match_parent">
-    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-        android:id="@+id/place_autocomplete_query_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_going_places"
-        android:textSize="20sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <FrameLayout
-        android:id="@+id/frame_for_plan_fragment"
+    <org.osmdroid.views.MapView
+        android:id="@+id/map_view_plan_trip"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_plan_trip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"/>
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_add_place"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"/>
 
 </LinearLayout>
