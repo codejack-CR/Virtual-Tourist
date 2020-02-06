@@ -26,28 +26,35 @@
             android:scaleType="fitCenter"
             android:src="@android:drawable/star_big_on"/>
     </com.google.android.material.circularreveal.cardview.CircularRevealCardView>
+
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/imgbtn_main_camera"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@android:drawable/ic_menu_camera"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="parent"
-        app:layout_constraintRight_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cv_tourism_welcome"
-        app:layout_constraintVertical_bias="0.9" />
+        app:layout_constraintRight_toLeftOf="parent" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_main_plan_trip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/imgbtn_main_camera"
-        app:layout_constraintBottom_toBottomOf="@id/cv_tourism_welcome"/>
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="64dp"
+        android:backgroundTint="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <Button
+        android:text="Plan a trip"
         android:id="@+id/fab_sos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@id/cv_tourism_welcome"
-        app:layout_constraintLeft_toRightOf="@id/imgbtn_main_camera"
-        app:layout_constraintRight_toLeftOf="@id/fab_main_plan_trip"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
