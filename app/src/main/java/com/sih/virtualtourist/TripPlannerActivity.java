@@ -198,7 +198,8 @@ public class TripPlannerActivity extends AppCompatActivity {
         mPlanConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                connect();
+//                connect();
+                primitiveConnect();
             }
         });
 //        ArrayAdapter adapter = new ArrayAdapter (this, android.R.layout.simple_list_item_multiple_choice, favs);
@@ -220,6 +221,7 @@ public class TripPlannerActivity extends AppCompatActivity {
                 currLongs = location.getLongitude();
                 GeoPoint geoPoint = new GeoPoint(currLats,currLongs);
                 mapController.setCenter(geoPoint);
+                geoPoints.add(geoPoint);
                 Marker startMarker = new Marker(mapView);
                 startMarker.setPosition(geoPoint);
                 startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
@@ -288,51 +290,60 @@ public class TripPlannerActivity extends AppCompatActivity {
 //        }
 //    }
 
-    private void connect(){
-        RequestQueue request = Volley.newRequestQueue(this);
-        StringBuilder stringBuilder = new StringBuilder("http://router.project-osrm.org/trip/v1/driving/");
-        stringBuilder.append(currLongs).append(",").append(currLats).append(";");
-        //First is Longitude and second is Latitude
-        GeoPoint last = geoPoints.get(geoPoints.size()-1);
-        geoPoints.remove(geoPoints.size()-1);
-        for(GeoPoint geoPoint : geoPoints){
-            stringBuilder.append(geoPoint.getLongitude());
-            stringBuilder.append(",");
-            stringBuilder.append(geoPoint.getLatitude());
-            stringBuilder.append(";");
-        }
-        stringBuilder.append(last.getLongitude());
-        stringBuilder.append(",");
-        stringBuilder.append(last.getLatitude());
-        stringBuilder.append("?source=first");
-        StringRequest request1 = new StringRequest(Request.Method.GET, stringBuilder.toString() , response ->{
-            try {
-                List<String> results = OSRMParser.parseMapData(response);
-                insertIntoData(results);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }, error -> {Log.i("Request", "Fail"); geoPoints.add(last);});
-        request.add(request1);
+//    private void connect(){
+//        RequestQueue request = Volley.newRequestQueue(this);
+//        StringBuilder stringBuilder = new StringBuilder("http://router.project-osrm.org/trip/v1/driving/");
+//        stringBuilder.append(currLongs).append(",").append(currLats).append(";");
+//        //First is Longitude and second is Latitude
+//        GeoPoint last = geoPoints.get(geoPoints.size()-1);
+//        geoPoints.remove(geoPoints.size()-1);
+//        for(GeoPoint geoPoint : geoPoints){
+//            stringBuilder.append(geoPoint.getLongitude());
+//            stringBuilder.append(",");
+//            stringBuilder.append(geoPoint.getLatitude());
+//            stringBuilder.append(";");
+//        }
+//        stringBuilder.append(last.getLongitude());
+//        stringBuilder.append(",");
+//        stringBuilder.append(last.getLatitude());
+//        stringBuilder.append("?source=first");
+//        StringRequest request1 = new StringRequest(Request.Method.GET, stringBuilder.toString() , response ->{
+//            try {
+//                List<String> results = OSRMParser.parseMapData(response);
+//                insertIntoData(results);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }, error -> {Log.i("Request", "Fail"); geoPoints.add(last);});
+//        request.add(request1);
+//
+//    }
+//
+//    private void insertIntoData(List<String> result){
+//        ArrayList<GeoPoint> geoPointArrayList = new ArrayList<>();
+//        int index =0 ;
+//        for(String coord : result){
+//            geoPointArrayList.add(new GeoPoint(new Double(result.get(index++)).doubleValue(), new Double(result.get(index++)).doubleValue()));
+//        }
+//        geoPoints.clear();
+//        geoPoints.addAll(geoPointArrayList);
+//        getTrip();
+//    }
+//    private void getTrip(){
+//        RoadManager roadManager = new OSRMRoadManager(this);
+//        Road road = roadManager.getRoad(geoPoints);
+//        Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
+//        mapView.getOverlays().add(roadOverlay);
+//        Toast.makeText(getApplicationContext(), "Getting Best ", Toast.LENGTH_LONG).show();
+//        mapView.invalidate();
+//    }
 
-    }
-
-    private void insertIntoData(List<String> result){
-        ArrayList<GeoPoint> geoPointArrayList = new ArrayList<>();
-        int index =0 ;
-        for(String coord : result){
-            geoPointArrayList.add(new GeoPoint(new Double(result.get(index++)).doubleValue(), new Double(result.get(index++)).doubleValue()));
-        }
-        geoPoints.clear();
-        geoPoints.addAll(geoPointArrayList);
-        getTrip();
-    }
-    private void getTrip(){
+    private void primitiveConnect(){
         RoadManager roadManager = new OSRMRoadManager(this);
         Road road = roadManager.getRoad(geoPoints);
         Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
         mapView.getOverlays().add(roadOverlay);
-        Toast.makeText(getApplicationContext(), "Getting Best ", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Getting Route to selected location ", Toast.LENGTH_LONG).show();
         mapView.invalidate();
     }
 }

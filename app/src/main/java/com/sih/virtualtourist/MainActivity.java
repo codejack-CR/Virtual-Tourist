@@ -17,10 +17,12 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     ImageButton mCameraButton;
     Toolbar toolbar;
     FloatingActionButton mSOS;
-    FloatingActionButton mPlanTripButton;
+    Button mPlanTripButton;
 
     private void initializeViewsOnCreate(){
         mCameraButton = findViewById(R.id.imgbtn_main_camera);
