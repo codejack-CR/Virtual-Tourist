@@ -17,9 +17,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -34,6 +36,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.json.JSONException;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.location.NominatimPOIProvider;
@@ -44,6 +47,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.FolderOverlay;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -175,6 +179,8 @@ public class TripPlannerActivity extends AppCompatActivity {
 //    }
     private IMapController mapController;
     private MapView mapView;
+    private AppCompatAutoCompleteTextView mInput;
+    private String[] favs = {"Calangute Beach", "Basilica of Bom Jesus", "Water Sports in Goa", "Fort Aguada", "Baga Beach"};
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -182,9 +188,9 @@ public class TripPlannerActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.plan_trip_main);
-        Configuration.getInstance().load(getApplicationContext(), PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
-        Configuration.getInstance().setUserAgentValue("LOL");
-        Configuration.getInstance().setUserAgentHttpHeader("LOL");
+        mInput = findViewById(R.id.autocomplete_search_places);
+        ArrayAdapter adapter = new ArrayAdapter (this, android.R.layout.simple_list_item_multiple_choice, favs);
+        mInput.setAdapter(adapter);
         mapView = findViewById(R.id.map_view_plan_trip);
         mapController = mapView.getController();
         mapController.setZoom(14);
@@ -207,18 +213,23 @@ public class TripPlannerActivity extends AppCompatActivity {
                 startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
                 startMarker.setSubDescription("YOU ARE HERE !");
                 mapView.getOverlays().add(startMarker);
-                final String userAgent = BuildConfig.APPLICATION_ID+"/"+BuildConfig.VERSION_NAME;
+                final String userAgent = RandomStringUtils.randomAlphabetic(8)+"/"+"1.0";
                 NominatimPOIProvider poiProvider = new NominatimPOIProvider(userAgent);
-                ArrayList<POI> pois = poiProvider.getPOICloseTo(geoPoint, "attraction", 10, 1.5);
+                ArrayList<POI> pois;
+                do {
+                    pois = poiProvider.getPOICloseTo(geoPoint, "attraction", 5, 1.5);
+                }while(pois == null);
                 FolderOverlay poiMarkers = new FolderOverlay(this);
                 mapView.getOverlays().add(poiMarkers);
-                Drawable poiIcon = getResources().getDrawable(R.drawable.marker_default);
+                Drawable poiIcon = getResources().getDrawable(R.drawable.marker_default_focused_base);
                 for (POI poi:pois){
                     Marker poiMarker = new Marker(mapView);
                     poiMarker.setTitle(poi.mType);
                     poiMarker.setSnippet(poi.mDescription);
                     poiMarker.setPosition(poi.mLocation);
                     poiMarker.setIcon(poiIcon);
+                    poiMarker.setInfoWindow(new CustomInfoWindow(mapView));
+                    poiMarker.setRelatedObject(poi);
                     if (poi.mThumbnail != null){
                         poiMarker.setImage( new BitmapDrawable(poi.mThumbnail));
                     }
@@ -227,5 +238,30 @@ public class TripPlannerActivity extends AppCompatActivity {
                 mapView.invalidate();
             }
         });
+
+    }
+
+    public class CustomInfoWindow extends MarkerInfoWindow{
+        POI mSelectedPoi;
+        public CustomInfoWindow(MapView mapView){
+            super(org.osmdroid.bonuspack.R.layout.bonuspack_bubble, mapView);
+            Button btn = mapView.findViewById(org.osmdroid.bonuspack.R.id.bubble_moreinfo);
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mSelectedPoi.mLocation != null){
+                        //TODO: Passing this as a reference
+                        List<GeoPoint> geoPoints = new ArrayList<>();
+                        geoPoints.add(mSelectedPoi.mLocation);
+                    }
+                }
+            });
+        }
+        @Override public void onOpen(Object item){
+            super.onOpen(item);
+            mView.findViewById(org.osmdroid.bonuspack.R.id.bubble_moreinfo).setVisibility(View.VISIBLE);
+            Marker marker = (Marker) item;
+            mSelectedPoi = (POI)marker.getRelatedObject();
+        }
     }
 }
