@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,12 +42,16 @@ import org.json.JSONException;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.location.NominatimPOIProvider;
 import org.osmdroid.bonuspack.location.POI;
+import org.osmdroid.bonuspack.routing.OSRMRoadManager;
+import org.osmdroid.bonuspack.routing.Road;
+import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.FolderOverlay;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 
 import java.io.IOException;
@@ -179,6 +184,7 @@ public class TripPlannerActivity extends AppCompatActivity {
 //    }
     private IMapController mapController;
     private MapView mapView;
+    private FloatingActionButton mPlanConfirm;
     private AppCompatAutoCompleteTextView mInput;
     private String[] favs = {"Calangute Beach", "Basilica of Bom Jesus", "Water Sports in Goa", "Fort Aguada", "Baga Beach"};
 
@@ -188,9 +194,15 @@ public class TripPlannerActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.plan_trip_main);
-        mInput = findViewById(R.id.autocomplete_search_places);
-        ArrayAdapter adapter = new ArrayAdapter (this, android.R.layout.simple_list_item_multiple_choice, favs);
-        mInput.setAdapter(adapter);
+        mPlanConfirm = findViewById(R.id.fab_trip_plan_trip);
+        mPlanConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                connect();
+            }
+        });
+//        ArrayAdapter adapter = new ArrayAdapter (this, android.R.layout.simple_list_item_multiple_choice, favs);
+//        mInput.setAdapter(adapter);
         mapView = findViewById(R.id.map_view_plan_trip);
         mapController = mapView.getController();
         mapController.setZoom(14);
@@ -212,6 +224,13 @@ public class TripPlannerActivity extends AppCompatActivity {
                 startMarker.setPosition(geoPoint);
                 startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
                 startMarker.setSubDescription("YOU ARE HERE !");
+                mapView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        connect();
+                        return false;
+                    }
+                });
                 mapView.getOverlays().add(startMarker);
                 final String userAgent = RandomStringUtils.randomAlphabetic(8)+"/"+"1.0";
                 NominatimPOIProvider poiProvider = new NominatimPOIProvider(userAgent);
@@ -228,7 +247,19 @@ public class TripPlannerActivity extends AppCompatActivity {
                     poiMarker.setSnippet(poi.mDescription);
                     poiMarker.setPosition(poi.mLocation);
                     poiMarker.setIcon(poiIcon);
-                    poiMarker.setInfoWindow(new CustomInfoWindow(mapView));
+//                    poiMarker.setInfoWindow(new CustomInfoWindow(mapView));
+                    poiMarker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+                        @Override
+                        public boolean onMarkerClick(Marker marker, MapView mapView) {
+                            ArrayList<GeoPoint> temp = new ArrayList<>();
+                            temp.addAll(geoPoints);
+                            geoPoints.clear();
+                            temp.add(marker.getPosition());
+                            geoPoints.addAll(temp);
+                            Toast.makeText(getApplicationContext(), "Place Selected !", Toast.LENGTH_LONG).show();
+                            return true;
+                        }
+                    });
                     poiMarker.setRelatedObject(poi);
                     if (poi.mThumbnail != null){
                         poiMarker.setImage( new BitmapDrawable(poi.mThumbnail));
@@ -239,29 +270,41 @@ public class TripPlannerActivity extends AppCompatActivity {
             }
         });
 
-    }
 
-    public class CustomInfoWindow extends MarkerInfoWindow{
-        POI mSelectedPoi;
-        public CustomInfoWindow(MapView mapView){
-            super(org.osmdroid.bonuspack.R.layout.bonuspack_bubble, mapView);
-            Button btn = mapView.findViewById(org.osmdroid.bonuspack.R.id.bubble_moreinfo);
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(mSelectedPoi.mLocation != null){
-                        //TODO: Passing this as a reference
-                        List<GeoPoint> geoPoints = new ArrayList<>();
-                        geoPoints.add(mSelectedPoi.mLocation);
-                    }
-                }
-            });
-        }
-        @Override public void onOpen(Object item){
-            super.onOpen(item);
-            mView.findViewById(org.osmdroid.bonuspack.R.id.bubble_moreinfo).setVisibility(View.VISIBLE);
-            Marker marker = (Marker) item;
-            mSelectedPoi = (POI)marker.getRelatedObject();
-        }
+    }
+    ArrayList<GeoPoint> geoPoints = new ArrayList<>();
+
+//    public class CustomInfoWindow extends MarkerInfoWindow{
+//        POI mSelectedPoi;
+//        public CustomInfoWindow(MapView mapView, Marker marker){
+//            super(org.osmdroid.bonuspack.R.layout.bonuspack_bubble, mapView);
+//            Button btn = mapView.findViewById(marker.);
+//            btn.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if(mSelectedPoi.mLocation != null){
+//                        //TODO: Passing this as a reference
+//                        geoPoints.add(mSelectedPoi.mLocation);
+//                        //connect();
+//                    }
+//                }
+//            });
+//        }
+//        @Override public void onOpen(Object item){
+//            super.onOpen(item);
+//            mView.findViewById(org.osmdroid.bonuspack.R.id.bubble_moreinfo).setVisibility(View.VISIBLE);
+//            Marker marker = (Marker) item;
+//            mSelectedPoi = (POI)marker.getRelatedObject();
+//        }
+//    }
+
+    private void connect(){
+        RoadManager roadManager = new OSRMRoadManager(this);
+        Road road = roadManager.getRoad(geoPoints);
+        Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
+        mapView.getOverlays().add(roadOverlay);
+        mapView.invalidate();
+        Toast.makeText(getApplicationContext(), "Hello", Toast.LENGTH_LONG).show();
+
     }
 }

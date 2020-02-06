@@ -5,13 +5,21 @@
     android:layout_width="match_parent"
     android:padding="10sp"
     android:layout_height="match_parent">
-    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-        android:id="@+id/autocomplete_search_places"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+<!--    <androidx.appcompat.widget.AppCompatAutoCompleteTextView-->
+<!--        android:id="@+id/autocomplete_search_places"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"/>-->
     <org.osmdroid.views.MapView
         android:id="@+id/map_view_plan_trip"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_weight="0.1"/>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_trip_plan_trip"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1.0"
+        android:padding="10sp"
+        android:layout_gravity="bottom|end"/>
 
 </LinearLayout>

@@ -9,10 +9,14 @@ import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.StrictMode;
+import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.ImageButton;
 
 import androidx.annotation.Nullable;
@@ -20,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
+import androidx.core.os.ConfigurationCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -34,10 +39,35 @@ public class MainActivity extends AppCompatActivity {
     static final int ID_CAMERA_ACTION = 101;
     ImageButton mCameraButton;
     Toolbar toolbar;
+    FloatingActionButton mSOS;
     FloatingActionButton mPlanTripButton;
 
     private void initializeViewsOnCreate(){
         mCameraButton = findViewById(R.id.imgbtn_main_camera);
+        mSOS = findViewById(R.id.fab_sos);
+//        mSOS.setOnTouchListener(new View.OnTouchListener() {
+//            long then = 0;
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if(event.getAction() == MotionEvent.ACTION_DOWN){
+//                    then = (Long) System.currentTimeMillis();
+//                }
+//                else if(event.getAction() == MotionEvent.ACTION_UP){
+//                    if(((Long) System.currentTimeMillis() - then) > 1200){
+//                        return true;
+//                    }
+//                }
+//                return false;
+//            }
+//        });
+        mSOS.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SOSActivity.class);
+                startActivity(intent);
+                return true;
+            }
+        });
         toolbar = findViewById(R.id.toolbar_main);
         mCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
