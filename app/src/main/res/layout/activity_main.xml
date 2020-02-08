@@ -19,12 +19,14 @@
         app:cardCornerRadius="20sp"
         app:cardElevation="10sp"
         android:layout_height="wrap_content">
-        <androidx.appcompat.widget.AppCompatImageView
+
+        <ImageView
             android:id="@+id/iv_goa_tourism_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scaleType="fitCenter"
-            android:src="@android:drawable/star_big_on"/>
+            android:src="@drawable/goa_tour_logo"
+            android:alpha="0.5"/>
     </com.google.android.material.circularreveal.cardview.CircularRevealCardView>
 
     <androidx.appcompat.widget.AppCompatImageButton
@@ -41,6 +43,7 @@
         android:id="@+id/fab_main_plan_trip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintVertical_bias="0.9"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintRight_toLeftOf="parent"
@@ -50,10 +53,10 @@
         android:id="@+id/fab_sos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
+        android:src="@android:drawable/stat_notify_error"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="64dp"
-        android:backgroundTint="@color/colorPrimaryDark"
+        app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         />

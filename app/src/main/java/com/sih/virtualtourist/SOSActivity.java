@@ -20,7 +20,7 @@ public class SOSActivity extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:8700369581"));
+                callIntent.setData(Uri.parse("tel:8130660940"));
                 startActivity(callIntent);
                 return true;
             }

@@ -206,7 +206,7 @@ public class TripPlannerActivity extends AppCompatActivity {
 //        mInput.setAdapter(adapter);
         mapView = findViewById(R.id.map_view_plan_trip);
         mapController = mapView.getController();
-        mapController.setZoom(14);
+        mapController.setZoom(1033);
         mapView.setTileSource(TileSourceFactory.MAPNIK);
         mapView.setBuiltInZoomControls(true);
         mapView.setMultiTouchControls(true);

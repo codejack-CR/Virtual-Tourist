@@ -13,6 +13,7 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Iterator;
+import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -169,13 +171,17 @@ public class MonumentInfoFrag extends Fragment {
         queue.add(request);
     }
 
+    TextToSpeech engine;
+
     private void JSONParse(String JSON) throws JSONException {
         JSONObject page = new JSONObject(JSON.toString());
         JSONObject query = page.getJSONObject("query");
         JSONObject pages = query.getJSONObject("pages");
         Iterator<String> pageIter = pages.keys();
         String pageID = pageIter.next();
-        mMonumentInfo.setText(pages.getJSONObject(pageID).getString("extract"));
+        String info = pages.getJSONObject(pageID).getString("extract");
+        mMonumentInfo.setText(info);
+
     }
 
     private void showFetchError(){
